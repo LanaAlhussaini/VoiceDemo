@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Web Speech API — Live Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css">
+  </head>
+<body>
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <div class="blob blob3"></div>
+ 
+  <div class="card">
+    <!-- mode toggle -->
+    <div class="mode-row">
+      <button class="mode-btn active" id="tabSTT" onclick="setMode('stt')">⬤ Speech-to-Text</button>
+      <button class="mode-btn"        id="tabTTS" onclick="setMode('tts')">◈ Text-to-Speech</button>
+    </div>
+ 
+    <div class="divider"></div>
+ 
+    <!-- waveform -->
+    <div class="wave-wrap">
+      <div class="rec-dot" id="recDot"></div>
+      <div class="wave" id="wave">
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+      </div>
+      <span class="wave-label" id="waveLabel">IDLE</span>
+    </div>
+ 
+    <!-- output -->
+    <div class="output-label" id="outputLabel">// Output</div>
+    <div class="output-box" id="output">
+      <span class="placeholder" id="placeholder">Awaiting voice input…</span>
+    </div>
+ 
+    <!-- TTS text input (hidden by default, shown in TTS mode) -->
+    <textarea id="ttsInput" placeholder="Type text here to speak…" style="display:none; width:100%; min-height:78px; padding:15px 17px; font-family:'Exo 2',sans-serif; font-size:0.98rem; color:#0a1a4e; background:#c8daf5; border:1px solid #93b8e8; border-radius:10px; resize:vertical; outline:none; line-height:1.7; margin-bottom:8px; box-sizing:border-box; transition:border-color 0.3s, box-shadow 0.3s;" onfocus="this.style.borderColor='#1e5fd4';this.style.boxShadow='0 0 10px #2563c818'" onblur="this.style.borderColor='#93b8e8';this.style.boxShadow='none'"></textarea>
+ 
+    <div class="status-row">
+      <span class="status-text" id="statusText">READY</span>
+    </div>
+ 
+    <!-- buttons -->
+    <div class="btn-row">
+      <button class="btn btn-main" id="mainBtn" onclick="handleMain()">🎙 Record</button>
+      <button class="btn btn-clear" onclick="clearOutput()">✕ Clear</button>
+    </div>
+  </div>
+ 
+  <footer>IT329 Advanced Web Technologies · <span>King Saud University</span></footer>
+ 
+  <script>
+    let currentMode = 'stt'; // 'stt' or 'tts'
+ 
+    function setMode(mode) {
+      currentMode = mode;
+      document.getElementById('tabSTT').classList.toggle('active', mode === 'stt');
+      document.getElementById('tabTTS').classList.toggle('active', mode === 'tts');
+ 
+      const btn     = document.getElementById('mainBtn');
+      const output  = document.getElementById('output');
+      const ttsInput = document.getElementById('ttsInput');
+      const label   = document.getElementById('outputLabel');
+ 
+      if (mode === 'stt') {
+        btn.textContent = '🎙 Record';
+        output.style.display = 'block';
+        ttsInput.style.display = 'none';
+        label.textContent = '// Output';
+      } else {
+        btn.textContent = '▶ Speak';
+        output.style.display = 'none';
+        ttsInput.style.display = 'block';
+        label.textContent = '// Type to Speak';
+        ttsInput.focus();
+      }
+      setStatus('READY', '');
+      setWave('');
+    }
+ 
+    function handleMain() {
+      if (currentMode === 'stt') startListening();
+      else speakText();
+    }
+ 
+    function setWave(mode) {
+      const wave = document.getElementById('wave');
+      const dot  = document.getElementById('recDot');
+      const lbl  = document.getElementById('waveLabel');
+      wave.className = 'wave';
+      dot.className  = 'rec-dot';
+      if (mode === 'listen') {
+        wave.classList.add('active'); dot.classList.add('on'); lbl.textContent = 'REC';
+      } else if (mode === 'speak') {
+        wave.classList.add('active','speak'); dot.classList.add('spk'); lbl.textContent = 'OUT';
+      } else { lbl.textContent = 'IDLE'; }
+    }
+ 
+    function setStatus(msg, cls) {
+      const el = document.getElementById('statusText');
+      el.textContent = msg;
+      el.className = 'status-text ' + (cls || '');
+    }
+ 
+    function startListening() {
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SR) { setStatus('BROWSER NOT SUPPORTED', 'on'); return; }
+      const r = new SR();
+      r.lang = 'en-US';
+      r.interimResults = false;
+      setStatus('LISTENING…', 'on'); setWave('listen');
+      r.start();
+      r.onresult = e => {
+        const t = e.results[0][0].transcript;
+        const box = document.getElementById('output');
+        box.textContent = t;
+        box.classList.add('active');
+        setStatus('CAPTURED', 'ok'); setWave('');
+      };
+      r.onerror = e => { setStatus('ERROR: ' + e.error.toUpperCase(), 'on'); setWave(''); };
+      r.onend   = () => {
+        if (document.getElementById('statusText').textContent === 'LISTENING…') {
+          setStatus('READY',''); setWave('');
+        }
+      };
+    }
+ 
+    function speakText() {
+      const text = document.getElementById('ttsInput').value.trim();
+      if (!text) { setStatus('NO TEXT TO SPEAK','on'); return; }
+      if (speechSynthesis.speaking) speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'en-US'; u.rate = 1; u.pitch = 1;
+      u.onstart = () => { setStatus('SYNTHESIZING…','spk'); setWave('speak'); };
+      u.onend   = () => { setStatus('COMPLETE','ok');        setWave(''); };
+      u.onerror = () => { setStatus('SYNTHESIS ERROR','on'); setWave(''); };
+      speechSynthesis.speak(u);
+    }
+ 
+    function clearOutput() {
+      const box = document.getElementById('output');
+      box.innerHTML = '<span class="placeholder" id="placeholder">Awaiting voice input…</span>';
+      box.classList.remove('active');
+      document.getElementById('ttsInput').value = '';
+      setStatus('READY',''); setWave('');
+    }
+  </script>
+</body>
+</html>
