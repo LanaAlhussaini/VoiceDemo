@@ -16,7 +16,6 @@ Visit the project here:
 ## 🛠️ Technologies Used
 - HTML
 - CSS
-- JavaScript
 - Web Speech API
 
 ## 📂 Project Structure
