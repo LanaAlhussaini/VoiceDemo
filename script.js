@@ -1,4 +1,13 @@
+/* ============================================================
+   script.js — VoiceCtrl
+   IT329 Advanced Web Technologies · King Saud University
+   ============================================================ */
 
+// ════════════════════════════════════════
+// PARTICLE SPHERE INTRO
+// Draws rotating 3D particle ball on canvas,
+// then morphs smoothly into the glowing ring
+// ════════════════════════════════════════
 (function initParticleSphere() {
   const canvas = document.getElementById('particleCanvas');
   if (!canvas) return;
@@ -76,7 +85,7 @@
         ? 0.4 + depth * 0.6
         : 0.25 + depth * 0.75;
 
-      // sphere color
+      // color: navy blue dots on light bg
       const r = Math.round(26  + depth * 20);
       const g = Math.round(80  + depth * 40);
       const b = Math.round(200 + depth * 30);
@@ -114,12 +123,18 @@ const msgBar      = document.getElementById('msgBar');
 const pr1         = document.getElementById('pr1');
 const pr2         = document.getElementById('pr2');
 
-// ── Show app after intro ─
+// ── Show app after intro ──────────────────────────────────────
 setTimeout(showApp, 4200);
 
 function showApp() {
+  appScreen.style.display = 'flex';
   appScreen.classList.remove('hidden');
-  requestAnimationFrame(() => appScreen.classList.add('visible'));
+  // double rAF ensures the browser has painted before adding visible
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      appScreen.classList.add('visible');
+    });
+  });
 }
 
 // ── Speech Recognition ───────────────────────────────────────
@@ -189,8 +204,8 @@ function stopListening() {
 function processCommand(t) {
 
   if (t.includes('hello') || t.includes('hi')) {
-    setRing('Hello! ', 'WELCOME');
-    setMsg('Hello! Welcome to the voice-controlled demo!', 'success');
+    setRing('Hello! 👋', 'GREETING');
+    setMsg('👋 Hello! Welcome to the voice-controlled demo!', 'success');
     resetRingAfter(3000);
   }
 
@@ -198,7 +213,7 @@ function processCommand(t) {
     document.body.classList.remove('light-mode');
     document.body.classList.add('dark-mode');
     setRing('Dark Mode', 'ACTIVATED');
-    setMsg('Dark mode activated!', 'success');
+    setMsg('🌙 Dark mode activated!', 'success');
     resetRingAfter(2500);
   }
 
@@ -206,7 +221,7 @@ function processCommand(t) {
     document.body.classList.remove('dark-mode');
     document.body.classList.add('light-mode');
     setRing('Light Mode', 'ACTIVATED');
-    setMsg('Light mode activated!', 'success');
+    setMsg('☀️ Light mode activated!', 'success');
     resetRingAfter(2500);
   }
 
@@ -216,7 +231,7 @@ function processCommand(t) {
     document.body.classList.add('color-flash');
     setTimeout(() => document.body.classList.remove('color-flash'), 400);
     setRing('Color!', 'CHANGED');
-    setMsg('Background color changed!', 'success');
+    setMsg('🎨 Background color changed!', 'success');
     resetRingAfter(2000);
   }
 
@@ -229,7 +244,7 @@ function processCommand(t) {
 
   else if (t.includes('refresh') || t.includes('reload')) {
     setRing('Refreshing', '...');
-    setMsg('Please wait while the page refreshes...', 'success');
+    setMsg('🔄 Refreshing…', 'success');
     setTimeout(() => window.location.reload(), 800);
   }
 
@@ -246,29 +261,32 @@ function processCommand(t) {
 
 // ── Play intro animation again (for "reload" command) ────────
 function playIntroThenReturn() {
-  // hide app
   appScreen.classList.remove('visible');
-  setTimeout(() => appScreen.classList.add('hidden'), 500);
+  appScreen.classList.add('hidden');
 
-  // reset and replay intro
   introScreen.style.animation  = 'none';
   introScreen.style.opacity    = '1';
   introScreen.style.visibility = 'visible';
   introScreen.style.pointerEvents = 'auto';
 
-  // force reflow so animation restarts
   void introScreen.offsetWidth;
   introScreen.style.animation = 'introExit 0.7s ease-in-out 3.4s forwards';
 
-  // show app again after intro
   setTimeout(() => {
-    appScreen.classList.remove('hidden');
-    requestAnimationFrame(() => appScreen.classList.add('visible'));
+    showApp();
     setRing('Hi', '');
     setMsg('Say a voice command to begin', '');
   }, 4300);
 }
 
+// ── Reset page ───────────────────────────────────────────────
+function resetPage() {
+  document.body.classList.remove('dark-mode', 'light-mode', 'color-flash');
+  document.body.style.backgroundColor = '';
+  setRing('Reset ✓', 'DONE');
+  setMsg('✅ Page has been reset!', 'success');
+  resetRingAfter(2000);
+}
 
 // ── Helpers ──────────────────────────────────────────────────
 function setRing(main, sub) {
