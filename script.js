@@ -1,13 +1,17 @@
-/* ============================================================
-   script.js — VoiceCtrl
-   IT329 Advanced Web Technologies · King Saud University
-   ============================================================ */
 
-// ════════════════════════════════════════
-// PARTICLE SPHERE INTRO
-// Draws rotating 3D particle ball on canvas,
-// then morphs smoothly into the glowing ring
-// ════════════════════════════════════════
+// ── DOM refs ─────────────────────────────────────────────────
+const introScreen = document.getElementById('introScreen');
+const appScreen   = document.getElementById('appScreen');
+const ring        = document.getElementById('ring');
+const ringText    = document.getElementById('ringText');
+const ringSub     = document.getElementById('ringSub');
+const micBtn      = document.getElementById('micBtn');
+const micIcon     = document.getElementById('micIcon');
+const micLabel    = document.getElementById('micLabel');
+const msgBar      = document.getElementById('msgBar');
+const pr1         = document.getElementById('pr1');
+const pr2         = document.getElementById('pr2');
+
 (function initParticleSphere() {
   const canvas = document.getElementById('particleCanvas');
   if (!canvas) return;
@@ -110,19 +114,6 @@
   rafId = requestAnimationFrame(draw);
 })();
 
-// ── DOM refs ─────────────────────────────────────────────────
-const introScreen = document.getElementById('introScreen');
-const appScreen   = document.getElementById('appScreen');
-const ring        = document.getElementById('ring');
-const ringText    = document.getElementById('ringText');
-const ringSub     = document.getElementById('ringSub');
-const micBtn      = document.getElementById('micBtn');
-const micIcon     = document.getElementById('micIcon');
-const micLabel    = document.getElementById('micLabel');
-const msgBar      = document.getElementById('msgBar');
-const pr1         = document.getElementById('pr1');
-const pr2         = document.getElementById('pr2');
-
 // ── Show app after intro ──────────────────────────────────────
 setTimeout(showApp, 4200);
 
@@ -197,7 +188,6 @@ function stopListening() {
   micBtn.classList.remove('listening');
   micIcon.textContent  = '🎙';
   micLabel.textContent = 'TAP TO SPEAK';
-  // do NOT reset ring text here — let processCommand or resetRingAfter handle it
 }
 
 // ── Process voice commands ───────────────────────────────────
@@ -221,7 +211,7 @@ function processCommand(t) {
     document.body.classList.remove('dark-mode');
     document.body.classList.add('light-mode');
     setRing('Light Mode', 'ACTIVATED');
-    setMsg('☀️ Light mode activated!', 'success');
+    setMsg('Light mode activated!', 'success');
     resetRingAfter(2500);
   }
 
@@ -231,20 +221,20 @@ function processCommand(t) {
     document.body.classList.add('color-flash');
     setTimeout(() => document.body.classList.remove('color-flash'), 400);
     setRing('Color!', 'CHANGED');
-    setMsg('🎨 Background color changed!', 'success');
+    setMsg('Background color changed!', 'success');
     resetRingAfter(2000);
   }
 
   else if (t.includes('open google')) {
     setRing('Opening…', 'GOOGLE');
-    setMsg('🌐 Opening Google in a new tab…', 'success');
+    setMsg('Opening Google in a new tab 🌐', 'success');
     setTimeout(() => window.open('https://www.google.com', '_blank'), 800);
     resetRingAfter(2500);
   }
 
   else if (t.includes('refresh') || t.includes('reload')) {
     setRing('Refreshing', '...');
-    setMsg('🔄 Refreshing…', 'success');
+    setMsg('Please wait while the page refreshes...', 'success');
     setTimeout(() => window.location.reload(), 800);
   }
 
@@ -277,15 +267,6 @@ function playIntroThenReturn() {
     setRing('Hi', '');
     setMsg('Say a voice command to begin', '');
   }, 4300);
-}
-
-// ── Reset page ───────────────────────────────────────────────
-function resetPage() {
-  document.body.classList.remove('dark-mode', 'light-mode', 'color-flash');
-  document.body.style.backgroundColor = '';
-  setRing('Reset ✓', 'DONE');
-  setMsg('✅ Page has been reset!', 'success');
-  resetRingAfter(2000);
 }
 
 // ── Helpers ──────────────────────────────────────────────────
