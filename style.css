@@ -10,12 +10,12 @@
   /* background */
   --bg:         #f0f5fc;
 
-  /* blob colors (soft, pastel — exactly like the slide) */
+  /* blob color) */
   --blob1:      #90b8e8;
   --blob2:      #7aaae0;
   --blob3:      #b0ccf0;
 
-  /* ring colors — navy/blue on light bg */
+  /* ring colors */
   --ring-color:  #1a50c8;
   --ring-glow:   rgba(26, 80, 200, 0.30);
   --ring-glow2:  rgba(26, 80, 200, 0.10);
@@ -72,11 +72,10 @@ body {
   background: var(--bg);
   display: flex; align-items: center; justify-content: center;
   overflow: hidden;
-  /* fade out after 3.4s */
   animation: introExit 0.7s ease-in-out 3.4s forwards;
 }
 
-/* intro blobs — same soft style as the slide */
+/* intro blobs */
 .intro-blob {
   position: absolute; border-radius: 50%;
   filter: blur(80px); pointer-events: none;
@@ -126,7 +125,7 @@ body {
   border-radius: 50%;
 }
 
-/* gold divider — matches slide */
+/* gold divider  */
 .intro-divider {
   width: 200px; height: 2px;
   background: linear-gradient(90deg, transparent, var(--gold), transparent);
@@ -172,7 +171,7 @@ body {
 #appScreen.visible { opacity: 1; }
 #appScreen.hidden  { pointer-events: none; }
 
-/* blobs — same as slide */
+/* blobs  */
 .blob {
   position: fixed; border-radius: 50%;
   filter: blur(85px); opacity: 0.50;
@@ -184,15 +183,14 @@ body {
 .b2 { width:480px; height:480px; background:var(--blob2); bottom:-170px; right:-155px; animation-delay:-8s; }
 .b3 { width:310px; height:310px; background:var(--blob3); top:42%; left:54%; opacity:0.28; animation-delay:-4s; }
 
-/* subtle grid for futuristic texture */
-.grid-overlay {
+/*.grid-overlay {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
   background-image:
     linear-gradient(rgba(26,80,200,0.04) 1px, transparent 1px),
     linear-gradient(90deg, rgba(26,80,200,0.04) 1px, transparent 1px);
   background-size: 44px 44px;
   transition: opacity 0.8s;
-}
+} */
 
 /* ── Ring wrap ── */
 .ring-wrap {
