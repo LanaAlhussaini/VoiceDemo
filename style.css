@@ -1,15 +1,4 @@
-/* ============================================================
-   style.css — VoiceCtrl
-   Theme: KSU Presentation Slide
-   - Off-white / very light blue-grey base
-   - Soft pastel blue blobs (top-left & bottom-right)
-   - Deep navy text (#0d1e5c)
-   - Gold/tan accent line
-   - Navy glowing ring (Alexa-style but in slide palette)
-   - Orbitron + Exo 2 for futuristic feel
-   ============================================================ */
 
-/* ── Variables ── */
 :root {
   /* slide palette */
   --navy:       #0d1e5c;
@@ -20,12 +9,12 @@
   /* background */
   --bg:         #f0f5fc;
 
-  /* blob colors (soft, pastel — exactly like the slide) */
+  /* blob colors */
   --blob1:      #90b8e8;
   --blob2:      #7aaae0;
   --blob3:      #b0ccf0;
 
-  /* ring colors — navy/blue on light bg */
+  /* ring colors */
   --ring-color:  #1a50c8;
   --ring-glow:   rgba(26, 80, 200, 0.30);
   --ring-glow2:  rgba(26, 80, 200, 0.10);
@@ -43,7 +32,7 @@
   --ring-size:  260px;
 }
 
-/* ── Dark mode (voice command) ── */
+/* ── Dark mode ── */
 body.dark-mode {
   --bg:         #07101f;
   --blob1:      #1a3a88;
@@ -86,7 +75,7 @@ body {
   animation: introExit 0.7s ease-in-out 3.4s forwards;
 }
 
-/* intro blobs — same soft style as the slide */
+/* intro blobs */
 .intro-blob {
   position: absolute; border-radius: 50%;
   filter: blur(80px); pointer-events: none;
@@ -189,7 +178,7 @@ body {
   pointer-events: none;
 }
 
-/* blobs — same as slide */
+/* blobs  */
 .blob {
   position: fixed; border-radius: 50%;
   filter: blur(85px); opacity: 0.50;
@@ -201,7 +190,7 @@ body {
 .b2 { width:480px; height:480px; background:var(--blob2); bottom:-170px; right:-155px; animation-delay:-8s; }
 .b3 { width:310px; height:310px; background:var(--blob3); top:42%; left:54%; opacity:0.28; animation-delay:-4s; }
 
-/* subtle grid for futuristic texture */
+/* subtle grid for futuristic texture 
 .grid-overlay {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
   background-image:
@@ -209,7 +198,7 @@ body {
     linear-gradient(90deg, rgba(26,80,200,0.04) 1px, transparent 1px);
   background-size: 44px 44px;
   transition: opacity 0.8s;
-}
+} */
 
 /* ── Ring wrap ── */
 .ring-wrap {
