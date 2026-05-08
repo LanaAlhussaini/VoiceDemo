@@ -1,3 +1,13 @@
+/* ============================================================
+   style.css — VoiceCtrl
+   Theme: KSU Presentation Slide
+   - Off-white / very light blue-grey base
+   - Soft pastel blue blobs (top-left & bottom-right)
+   - Deep navy text (#0d1e5c)
+   - Gold/tan accent line
+   - Navy glowing ring (Alexa-style but in slide palette)
+   - Orbitron + Exo 2 for futuristic feel
+   ============================================================ */
 
 /* ── Variables ── */
 :root {
@@ -167,10 +177,17 @@ body {
   padding: 40px 20px 28px;
   position: relative;
   opacity: 0;
+  pointer-events: none;
   transition: opacity 0.8s ease;
 }
-#appScreen.visible { opacity: 1; }
-#appScreen.hidden  { pointer-events: none; }
+#appScreen.visible {
+  opacity: 1;
+  pointer-events: all;
+}
+#appScreen.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
 
 /* blobs — same as slide */
 .blob {
@@ -184,7 +201,7 @@ body {
 .b2 { width:480px; height:480px; background:var(--blob2); bottom:-170px; right:-155px; animation-delay:-8s; }
 .b3 { width:310px; height:310px; background:var(--blob3); top:42%; left:54%; opacity:0.28; animation-delay:-4s; }
 
-/* subtle grid for futuristic texture 
+/* subtle grid for futuristic texture */
 .grid-overlay {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
   background-image:
@@ -192,7 +209,7 @@ body {
     linear-gradient(90deg, rgba(26,80,200,0.04) 1px, transparent 1px);
   background-size: 44px 44px;
   transition: opacity 0.8s;
-} */
+}
 
 /* ── Ring wrap ── */
 .ring-wrap {
